@@ -1,0 +1,25 @@
+<h1>Show blog</h1>
+
+<p>
+    <strong>Title:</strong>
+    <%= @blog.title %>
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Listing entries</th>
+    </tr>
+  </thead>
+ 
+  <tbody>
+    <% @entries.each do |entry| %>
+      <tr>
+        <td><%= entry.title %></td>
+        <td><%= link_to 'Show', blog_entry_path(entry) %></td>
+        <td><%= link_to 'Edit', edit_blog_entry_path(entry) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= link_to 'New Entry', new_blog_entry_path(@blog.id) %>

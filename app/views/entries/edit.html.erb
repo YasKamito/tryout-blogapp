@@ -1,0 +1,13 @@
+<h1>Edit entry</h1>
+ 
+<%= form_for(@blog) do |f| %>
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title%>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+ 
+<%= link_to 'Back', blogs_path %>

@@ -1,0 +1,51 @@
+
+<h1>
+    <%= @blog.title %>
+</h1>
+
+<h2>
+    <strong>Title:</strong>
+    <%= @entry.title %>
+</h2>
+
+<h2>
+    <strong>Body:</strong>
+    <%= @entry.body %>
+</h2>
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Listing comments</th>
+    </tr>
+  </thead>
+ 
+  <tbody>
+    <% @comments.each do |comment| %>
+      <tr>
+        <td><%= comment.status == 'approved' ? comment.body : '(承認待ち）' %></td>
+        <td><%= link_to 'approve', approve_blog_entry_comment_path(@blog.id, @entry.id, comment.id), :method => :post, :confirm => 'Are you sure?' if comment.status != 'approved' %></td>
+        <td><%= link_to 'Destroy', blog_entry_comment_path(@blog.id, @entry.id, comment.id), :method => :delete, :confirm => 'Are you sure?' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% @comment = Comment.new unless @comment %>
+
+<%= form_for([@blog, @entry, @comment]) do |f| %>
+  <% flash.each do |key, value| %>
+    <div class="alert alert-<%= key %>"><%= value %></div>
+  <% end %>
+  <div class="field">
+    <tr>
+      <td><%= f.label :body %> </td>
+      <td><%= f.text_field :body %> </td>
+    </tr>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

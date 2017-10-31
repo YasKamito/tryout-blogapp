@@ -16,6 +16,12 @@ class EntriesController < ApplicationController
         end
     end
     
+    def show
+        @blog = Blog.find(params[:blog_id])
+        @entry = @blog.entries.find(params[:id])
+        @comments = @entry.comments
+    end
+
     private
     def entry_params
         params.require(:entry).permit(:title, :body, :blog_id)

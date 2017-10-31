@@ -16,8 +16,8 @@
     <% @entries.each do |entry| %>
       <tr>
         <td><%= entry.title %></td>
-        <td><%= link_to 'Show', blog_entry_path(entry) %></td>
-        <td><%= link_to 'Edit', edit_blog_entry_path(entry) %></td>
+        <td><%= link_to 'Show', blog_entry_path(@blog.id, entry) %></td>
+        <td><%= link_to 'Edit', edit_blog_entry_path(@blog.id, entry) %></td>
       </tr>
     <% end %>
   </tbody>

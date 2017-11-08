@@ -16,10 +16,25 @@ class EntriesController < ApplicationController
         end
     end
     
+    def edit
+        @blog = Blog.find(params[:blog_id])
+        @entry = @blog.entries.find(params[:id])
+    end
+
     def show
         @blog = Blog.find(params[:blog_id])
         @entry = @blog.entries.find(params[:id])
         @comments = @entry.comments
+    end
+
+    def update
+        @blog = Blog.find(params[:blog_id])
+        @entry = @blog.entries.find(params[:id])
+        if @entry.update(entry_params)
+            redirect_to blog_entry_url(@blog.id, @entry.id)
+        else
+            render 'edit'
+        end
     end
 
     private

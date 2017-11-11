@@ -23,8 +23,10 @@ class EntriesController < ApplicationController
 
     def show
         @blog = Blog.find(params[:blog_id])
-        @entry = @blog.entries.find(params[:id])
-        @comments = @entry.comments
+        if @blog.entries.exists?(params[:id])
+            @entry = @blog.entries.find(params[:id])
+            @comments = @entry.comments
+        end
     end
 
     def update

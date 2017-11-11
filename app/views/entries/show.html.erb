@@ -3,6 +3,7 @@
     <%= @blog.title %>
 </h1>
 
+<% if @entry.present? %>
 <h2>
     <strong>Title:</strong>
     <%= @entry.title %>
@@ -51,3 +52,5 @@
     <%= f.submit %>
   </div>
 <% end %>
+<% end %>
+

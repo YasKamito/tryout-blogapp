@@ -21,6 +21,7 @@
         <td><%= entry.title %></td>
         <td><%= link_to 'Show', blog_entry_path(@blog.id, entry) %></td>
         <td><%= link_to 'Edit', edit_blog_entry_path(@blog.id, entry) %></td>
+        <td><%= link_to 'Destroy', blog_entry_path(@blog.id, entry), :method => :delete %></td>
       </tr>
     <% end %>
   </tbody>

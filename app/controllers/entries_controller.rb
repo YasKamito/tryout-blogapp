@@ -39,6 +39,18 @@ class EntriesController < ApplicationController
         end
     end
 
+    def destroy
+        @blog = Blog.find(params[:blog_id])
+        @entry = Entry.find(params[:id])
+        if @entry.destroy
+            flash[:notice] = "削除しました"
+            redirect_to blog_path(@blog.id)
+        else
+            flash[:notice] = "削除に失敗しました"
+            render blog_path(@blog.id)
+        end
+    end
+
     private
     def entry_params
         params.require(:entry).permit(:title, :body, :blog_id)

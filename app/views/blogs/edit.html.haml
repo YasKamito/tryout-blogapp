@@ -1,0 +1,16 @@
+!!!
+%html{lang: "ja"}
+  %head
+    %meta{charset: "utf-8"}
+  %body
+    %h1
+      Edit blog
+
+    = form_for(@blog) do |f|
+      %div#field
+        = f.label :title
+        = f.text_field :title
+      %div#actions
+        = f.submit
+    = link_to 'Back', blogs_path
+ 

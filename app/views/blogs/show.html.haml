@@ -1,0 +1,30 @@
+!!!
+%html{lang: "ja"}
+  %head
+    %meta{charset: "utf-8"}
+  %body
+    %h1 Show blog
+    %p
+      %strong
+        %Title:<
+          = @blog.title
+    %div
+      %p
+        = link_to 'Edit', edit_blog_path(@blog.id)
+    %table
+      %thead
+        %tr
+          %th Listing entries
+      %tbody
+        - @entries.each do |entry|
+          %tr
+            %td<
+              = entry.title
+            %td<
+              = link_to 'Show', blog_entry_path(@blog.id, entry)
+            %td<
+              = link_to 'Edit', edit_blog_entry_path(@blog.id, entry)
+            %td<
+              = link_to 'Destroy', blog_entry_path(@blog.id, entry), :method => :delete
+
+    = link_to 'New Entry', new_blog_entry_path(@blog.id)

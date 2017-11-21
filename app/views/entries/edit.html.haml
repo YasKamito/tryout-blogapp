@@ -1,0 +1,15 @@
+%h1 Edit entry
+= form_for([@blog, @entry]) do |f|
+  - flash.each do |key, value|
+    %div{:class => "alert alert-#{key}"}= value
+  .field
+    = f.label :title
+    %br/
+    = f.text_field :title
+  .field
+    = f.label :body
+    %br/
+    = f.text_field :body
+  .actions
+    = f.submit
+= link_to 'Back', blog_entry_path(@blog.id)

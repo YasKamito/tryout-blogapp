@@ -7,9 +7,7 @@
     
     = form_for([@blog, @entry]) do |f|
       - flash.each do |key, value|
-        .alert
-          = value
-          
+        %div{:class => "alert alert-#{key}"}= value
       .field
         = f.label :title
         = f.text_field :title
@@ -19,4 +17,4 @@
       .actions
         = f.submit
   
-    = link_to 'Back', blog_entries_path
+    = link_to 'Back', blog_path(@blog.id)

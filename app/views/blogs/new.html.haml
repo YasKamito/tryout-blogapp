@@ -7,6 +7,8 @@
       New blog
 
     = form_for(@blog) do |f|
+      - flash.each do |key, value|
+        %div{:class => "alert alert-#{key}"}= value
       %div#field
         = f.label :title
         = f.text_field :title

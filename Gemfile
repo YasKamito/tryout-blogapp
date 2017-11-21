@@ -54,6 +54,7 @@ group :development do
   gem 'ruby-debug-ide'
   gem 'debase'
   gem 'ripper-tags'
+  gem 'erb2haml'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

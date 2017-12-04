@@ -12,13 +12,13 @@
 
 ActiveRecord::Schema.define(version: 20171003132820) do
 
-  create_table "blogs", force: :cascade do |t|
+  create_table "blogs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "comments", force: :cascade do |t|
+  create_table "comments", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text "body"
     t.string "status"
     t.integer "entry_id"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 20171003132820) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "entries", force: :cascade do |t|
+  create_table "entries", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "title"
     t.text "body"
     t.integer "blog_id"

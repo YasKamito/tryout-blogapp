@@ -23,7 +23,9 @@ class BlogsController < ApplicationController
     end
 
     def show
-        @blog = Blog.find(params[:id])
+        #@blog = Blog.find(params[:id])
+        #@blog = Blog.where("id = #{params[:id]}").first
+        @blog = Blog.where("id = ?", params[:id]).first
         @entries = @blog.entries
     end
 

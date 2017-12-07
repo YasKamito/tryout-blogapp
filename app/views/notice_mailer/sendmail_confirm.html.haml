@@ -1,0 +1,14 @@
+%p 
+  = "新しいコメントが登録されました。"
+%p 
+  = "承認または削除してください。"
+%p 
+  = "Blog: " + @blog.title
+  %br
+  = "Entry: " + @entry.title
+  %br
+  = "Comment: " + @comment.body
+
+%p
+  = blog_entry_url(@blog.id, @entry.id)
+

@@ -6,17 +6,18 @@ class CommentsController < ApplicationController
     end
     
     def create
+        @blog = Blog.find(params[:blog_id])
+        @entry = Entry.find(params[:entry_id])
         @comment = Comment.new(comment_params)
-        @comment.entry_id = params[:entry_id]
+        @comment.entry_id = @entry.id
         @comment.status = "unapproved"
         pp @comment
         if @comment.save
-            redirect_to blog_entry_url(params[:blog_id], params[:entry_id])
+            NoticeMailer.sendmail_confirm(@blog, @entry, @comment).deliver
+            redirect_to blog_entry_url(@blog.id, @entry.id)
         else
-            @blog = Blog.find(params[:blog_id])
-            @entry = Entry.find(params[:entry_id])
             flash[:notice] = "失敗しました"
-            render blog_entry_url(params[:blog_id], params[:entry_id])
+            render blog_entry_url(@blog.id, @entry.id)
         end
     end
 
@@ -45,6 +46,14 @@ class CommentsController < ApplicationController
             flash[:notice] = "更新に失敗しました"
             render blog_entry_path(@blog.id, @entry.id)
         end
+    end
+
+    def send_mail
+        @blog = Blog.find(params[:blog_id])
+        @entry = Entry.find(params[:entry_id])
+        @comment = Comment.find(params[:id])
+        @mail = NoticeMailer.sendmail_confirm(@blog, @entry, @comment).deliver
+        render :text => "送信できた！"
     end
 
     private

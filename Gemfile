@@ -56,6 +56,7 @@ group :development do
   gem 'debase'
   gem 'ripper-tags'
   gem 'erb2haml'
+  gem "letter_opener", "~> 1.1.0"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

@@ -12,14 +12,17 @@ RSpec.describe BlogsController, type: :controller do
             expect(assigns(:blogs)).to match_array([@dog,@cat])            
         end
 
+        it "renders the :index template" do
+            get :index
+            expect(response).to render_template :index
+        end
+
     end
     
     describe 'POST #create' do
-        
         it "新規作成後に@blogのshowに遷移すること" do
-            post 'create', {title: 'dog' }
-            response.expect redirect_to blog_path(@blog)
+            post :create, params: { blog: attributes_for(:blog)}
+            expect(response).to redirect_to blog_path(assigns[:blog])
         end
-
     end
 end

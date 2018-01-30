@@ -172,3 +172,158 @@ Finished in 0.02028 seconds (files took 2.07 seconds to load)
 [rspec導入参考](https://qiita.com/akiko-pusu/items/0f15130509a88cf59a7d)
 [テストコード参考](https://semaphoreci.com/community/tutorials/how-to-test-rails-models-with-rspec)
 
+
+## rspecでコントローラのテストコード
+
+* 年末あたりからググっていろいろとコントローラのspec記述方法について調べる。
+* factoryGirlを当初導入していなかったが、いよいよ避けて通れないと判断して導入
+* ググってしらべたfactoryGirlでのコントローラテスト方法では解説が不十分で理解が進まないため、「Everyday rails」電子書籍を購入
+* コントローラのテストがようやく通ったが、深く理解するためにテストのバリエーションについて勉強に時間をかけることとする
+
+#### テスト環境整備
+
+* gemfile
+
+```
+group :development, :test do
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  # Adds support for Capybara system testing and selenium driver
+  gem 'capybara', '~> 2.13'
+  gem 'selenium-webdriver'
+  gem 'rspec-rails'
+  gem "factory_girl_rails", "~> 4.4.1"
+  gem "rails-controller-testing"
+end
+
+group :test do
+  gem "faker"
+  gem "database_cleaner"
+  gem "launchy"
+  gem "selenium-webdriver"
+end
+```
+
+* config/application.rb
+
+```
+    config.generators do |g|
+      g.test_framework :rspec,
+        fixtures: true,
+        view_specs: false,
+        helper_specs: false,
+        routing_specs: false,
+        controller_specs: true,
+        request_specs: false
+      g.fixture_replacement :factory_girl, dir: "spec/factories"
+    end
+    
+```
+
+* .rspec
+
+```
+--color
+--format documentation
+```
+
+* rails_helper.rb
+
+```
+  # FactoryGirlを簡単に呼べるようにする
+  config.include FactoryGirl::Syntax::Methods
+  
+  [:controller, :view, :request].each do |type|
+    config.include ::Rails::Controller::Testing::TestProcess, type: type
+    config.include ::Rails::Controller::Testing::TemplateAssertions, type: type
+    config.include ::Rails::Controller::Testing::Integration, type: type
+  end
+
+```
+
+### factoryを使ったテスト
+
+* factory作成
+  * spec/factories/models.rb
+
+```
+FactoryGirl.define do
+    factory :blog do
+        title {Faker::Dog.name}
+    end
+end
+```
+
+* model specを変更
+
+```
+require 'rails_helper'
+
+RSpec.describe Blog, type: :model do
+  it "titleがあれば有効な状態であること" do
+    # blog = Blog.new(title: 'dummy')
+    blog = build(:blog, title: 'dummy')
+    expect(blog).to be_valid
+  end
+
+  it "titleがなければ無効な状態であること" do
+    # blog = Blog.new(title: nil)
+    blog = build(:blog, title: nil)
+    expect(blog).to_not be_valid
+  end
+end
+
+```
+
+* controller spec作成
+
+```
+require 'rails_helper'
+
+RSpec.describe BlogsController, type: :controller do
+    describe 'GET #index' do
+        before do
+            @dog = create(:blog, id: 1, title: 'dog' )
+            @cat = create(:blog, id: 2, title: 'cat' )
+            get 'index'
+        end
+
+        it "@blogsに全てのBlogが入っていること" do
+            expect(assigns(:blogs)).to match_array([@dog,@cat])            
+        end
+
+        it "renders the :index template" do
+            get :index
+            expect(response).to render_template :index
+        end
+
+    end
+    
+    describe 'POST #create' do
+        it "新規作成後に@blogのshowに遷移すること" do
+            post :create, params: { blog: attributes_for(:blog)}
+            expect(response).to redirect_to blog_path(assigns[:blog])
+        end
+    end
+end
+
+```
+
+* controllerにバグ発見
+
+```
+    def create
+        @blog = Blog.new(blog_params)
+
+        if @blog.save
+            # redirect_to blogs_url    ※param引き渡し忘れ
+            redirect_to blog_url(@blog)
+        else
+            render 'new'
+        end
+
+    end
+```
+
+### 引き続き勉強・・
+
